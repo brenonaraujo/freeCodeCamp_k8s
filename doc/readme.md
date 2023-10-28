@@ -365,11 +365,17 @@ The goal of the Blue-Green deployment strategy is to reduce downtime and risk by
 
 ## Services
 
+![Alt text](image-6.png)
+
 ### ClusterIp
 
 ![Alt text](image.png)
 
 **Accessing microservices** 
+
+![Alt text](image-7.png)
+
+![Alt text](image-8.png)
 
 1. **Pods**: In Kubernetes, a pod is the smallest deployable unit. It can contain one or more containers that make up your microservice. The diagram shows three sets of pods (green, purple, and orange), each potentially representing a different microservice.
 
@@ -380,6 +386,15 @@ The goal of the Blue-Green deployment strategy is to reduce downtime and risk by
    - **Ephemeral**: These services are transient. The data or state is temporary and can be lost if the pod restarts or is rescheduled. They're stateless and don't maintain any persistent storage or state across pod restarts.
 
 The arrows from "Durable" and "Ephemeral" point towards the ClusterIP, indicating how external requests (or requests from other services) might access these microservices. Typically, you'd send a request to the ClusterIP, which then load-balances that request among its associated pods.
+
+### Multi-port services
+
+![Alt text](image-9.png)
+
+
+### Headless Service
+
+![Alt text](image-10.png)
 
 ## NodePort
 
