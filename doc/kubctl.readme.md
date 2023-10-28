@@ -392,6 +392,9 @@ PVC: Persistent Volume claim, A one-to-one mapping to a persistent volume
 
 ![Alt text](image-2.png)
 
+## Config map
 
+![Alt text](image-3.png)
 
+![Alt text](image-4.png)
 
