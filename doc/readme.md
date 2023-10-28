@@ -448,3 +448,92 @@ Here are some key points about Kubernetes Secrets:
 
 ## Horizontal Pod AutoScaling
 
+1. **Uses the K8s Metrics Server**: The Kubernetes Metrics Server is a scalable, efficient source of container resource metrics. HPA utilizes these metrics to make scaling decisions. The metrics include CPU utilization, memory usage, etc.
+
+2. **Pods must have requests and limits defined**: For HPA to work effectively, the pods should have resource requests (minimum resources a container requires) and limits (maximum resources a container can use) defined. This helps HPA make informed decisions based on actual resource usage compared to the set requests and limits.
+
+3. **The HPA checks the Metrics Server every 30 seconds**: HPA periodically queries the Metrics Server to determine the current resource usage of the pods and decides whether to scale them up or down. This periodic check typically happens every 30 seconds.
+
+4. **Scale according to the min and max number of replicas defined**: While setting up HPA, one can define the minimum and maximum number of pod replicas. HPA ensures that the number of replicas stays within these boundaries while scaling.
+
+5. **Cooldown/Delay**:
+   - **Prevent racing conditions**: After scaling up or down, HPA doesn't immediately react to metrics changes. This prevents the system from continuously scaling due to short-lived spikes or drops in usage.
+   - **Once a change has been made, HPA waits**: HPA has built-in delays (cooldown periods) after a scaling activity.
+   - **By default, the delay on scale up events is 3 minutes, and the delay on scale down events is 5 minutes**: These defaults ensure that the system doesn't scale up too quickly if there's a sudden but brief spike in traffic, and likewise, it doesn't scale down too swiftly, ensuring availability if the traffic increases again shortly.
+
+
+## Helm Charts
+
+Helm is a package manager for Kubernetes. Just as package managers like `apt`, `yum`, and `npm` have simplified software installation on operating systems and development environments, Helm streamlines the process of defining, installing, and upgrading even the most complex Kubernetes applications.
+
+Here's a brief overview of Helm and how to use it with Kubernetes:
+
+1. **Charts**: Helm packages are called "charts." A chart is a collection of pre-configured Kubernetes resources. It can be thought of as the Kubernetes equivalent of a yum or apt package.
+
+2. **Repository**: Like other package managers, Helm also has a concept of repositories where charts can be shared and distributed.
+
+3. **Release**: Once a chart is installed into Kubernetes, that installation becomes a "release." A release is an instance of a chart running in a Kubernetes cluster.
+
+## Using Helm with Kubernetes:
+
+### 1. Installing Helm:
+To use Helm with Kubernetes, you first need to install the Helm CLI. Depending on your OS, the installation method might vary. One common way is using `curl`:
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+
+### 2. Initialize Helm and Install Tiller (for Helm v2):
+In Helm 2, the server-side component was called "Tiller". Note that Helm 3, the latest version as of my last update, removed the need for Tiller for better security posture.
+
+For Helm 2:
+
+```bash
+helm init
+```
+
+### 3. Add a Chart Repository:
+Before you can install charts, you need to add a chart repository. The most common one is the Helm stable repository:
+
+```bash
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+```
+
+### 4. Search and Install a Chart:
+To find charts, you can search the added repositories:
+
+```bash
+helm search repo stable
+```
+
+To install a chart, use the `helm install` command:
+
+```bash
+helm install stable/mysql --generate-name
+```
+
+This will install the `mysql` chart from the `stable` repository with a generated name.
+
+### 5. Upgrade and Rollback Releases:
+To upgrade a release:
+
+```bash
+helm upgrade [RELEASE_NAME] [CHART]
+```
+
+To rollback a release to a previous version:
+
+```bash
+helm rollback [RELEASE_NAME] [REVISION]
+```
+
+### 6. Uninstalling a Release:
+To remove a release and purge its resources from Kubernetes:
+
+```bash
+helm uninstall [RELEASE_NAME]
+```
+
+#### Conclusion:
+Helm simplifies the deployment of applications in Kubernetes by leveraging templated packages called charts. This ensures reproducibility, modularity, and standardization across deployments, making it an essential tool for many Kubernetes users. When starting out with Helm, it's a good idea to refer to the official documentation and get familiar with creating your own charts for custom applications.
