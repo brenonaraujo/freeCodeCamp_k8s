@@ -446,3 +446,5 @@ Here are some key points about Kubernetes Secrets:
 
 ![Alt text](image-5.png)
 
+## Horizontal Pod AutoScaling
+
