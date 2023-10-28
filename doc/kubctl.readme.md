@@ -361,3 +361,37 @@ The process of Blue-Green deployment typically involves the following steps:
 5. **Scaling Down**: After the transition is complete and the new version is stable, the blue version can be decommissioned to free up resources.
 
 The goal of the Blue-Green deployment strategy is to reduce downtime and risk by having two separate environments. It allows for quick rollbacks in case of issues and ensures that the new version is fully operational before any users are routed to it.
+
+
+## Services
+
+### ClusterIp
+
+![Alt text](image.png)
+
+**Accessing microservices** 
+
+1. **Pods**: In Kubernetes, a pod is the smallest deployable unit. It can contain one or more containers that make up your microservice. The diagram shows three sets of pods (green, purple, and orange), each potentially representing a different microservice.
+
+2. **ClusterIP**: ClusterIP is the default Kubernetes service type. It provides a single IP address for the set of pods, allowing internal communications within the cluster. In the context of the diagram, there are two ClusterIPs, each directing traffic to a set of pods. The purpose of the ClusterIP is to load-balance the traffic across the pods associated with it.
+
+3. **Durable vs. Ephemeral**: The terms "Durable" and "Ephemeral" likely refer to the nature of the data or the state maintained by the microservices:
+   - **Durable**: These services or databases are persistent in nature. Even if the pods are restarted or rescheduled, the data remains intact. For example, if a pod represents a database, the data it stores would remain even after the pod is destroyed and recreated.
+   - **Ephemeral**: These services are transient. The data or state is temporary and can be lost if the pod restarts or is rescheduled. They're stateless and don't maintain any persistent storage or state across pod restarts.
+
+The arrows from "Durable" and "Ephemeral" point towards the ClusterIP, indicating how external requests (or requests from other services) might access these microservices. Typically, you'd send a request to the ClusterIP, which then load-balances that request among its associated pods.
+
+## NodePort
+
+![Alt text](image-1.png)
+
+## Storage and Persistency
+
+PV: Persistent Volume, represent a storage resource, cluster wide, provisioned by admin
+PVC: Persistent Volume claim, A one-to-one mapping to a persistent volume
+
+![Alt text](image-2.png)
+
+
+
+
