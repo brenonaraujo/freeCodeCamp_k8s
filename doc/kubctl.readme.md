@@ -398,3 +398,51 @@ PVC: Persistent Volume claim, A one-to-one mapping to a persistent volume
 
 ![Alt text](image-4.png)
 
+## Secrets
+
+Kubernetes Secrets are a specialized object type that allows you to store sensitive information, such as passwords, OAuth tokens, SSH keys, and other sensitive data. This ensures that sensitive data is decoupled from pod specifications and images, providing a more secure and modular approach to handling sensitive data in a Kubernetes environment.
+
+Here are some key points about Kubernetes Secrets:
+
+1. **Storage**: Secrets are stored in the etcd datastore used by Kubernetes, which is a key-value store database.
+
+2. **Encryption**: In etcd, Secrets are encrypted at rest by default in newer versions of Kubernetes. However, it's essential to ensure that encryption is correctly set up. Otherwise, Secrets are base64 encoded, which is not a secure encryption method.
+
+3. **Access**: Secrets can be mounted as data volumes or made available to pods as environment variables. When a pod accesses a secret, it's temporarily stored in a tmpfs volume on the node, ensuring it doesn't get written to non-volatile storage.
+
+4. **Size Limit**: Secrets are limited in size to 1MiB due to their use of the etcd datastore. This means that large files or data chunks, like certificates, may need to be split or stored differently.
+
+5. **Lifecycle**: Like other Kubernetes resources, Secrets have a lifecycle, and they can be created, updated, and deleted. It's essential to ensure proper access controls to prevent unauthorized access.
+
+6. **Use Cases**: Some common use cases for Kubernetes Secrets include:
+   - Storing API keys for external services.
+   - Storing database credentials.
+   - Storing certificates and keys for TLS.
+   
+7. **Security Concerns**: While Kubernetes Secrets provide a mechanism to manage sensitive information, they are not an end-to-end security solution. Best practices include:
+   - Limiting access to the etcd datastore.
+   - Regularly rotating and auditing secrets.
+   - Using additional tools like HashiCorp Vault or AWS KMS for enhanced security solutions tailored for secret management.
+
+8. **Types**: There are built-in types of Secrets for specific use cases, such as:
+   - `kubernetes.io/service-account-token`: Used for service account authentication.
+   - `kubernetes.io/dockercfg`: Used for Docker (and some other container runtimes) authentication.
+   - `kubernetes.io/tls`: Used for storing certificates and keys for TLS.
+   
+9. **Creation**: Secrets can be created using `kubectl create secret` command or using YAML files.
+
+10. **Best Practices**: It's crucial not to embed Secrets directly into your application's code or container images. Instead, reference them from your Kubernetes deployments, and keep actual secret values out of your application's source code.
+
+## Observability - Probes
+
+- **Startup probes**
+  - Container has started
+- **Readiness probes**
+  - To know when a container is ready to accept traffic
+  - Failing readniess proble will stop the application from receiving trafic
+- **Liveness probes**
+  - Indicates whether the code is running or not
+  - failing will restart container
+
+![Alt text](image-5.png)
+
